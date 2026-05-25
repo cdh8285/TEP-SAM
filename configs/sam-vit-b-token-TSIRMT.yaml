@@ -1,0 +1,109 @@
+train_dataset:
+  dataset:
+    name: paired-sequence-folders
+    args:
+      root_path_1: /data/donghao/ir_dataset/TSIRMT/images
+      root_path_2: /data/donghao/ir_dataset/TSIRMT/masks
+      layout: split_images_masks
+      seq_list: /data/donghao/ir_dataset/TSIRMT/ImageSets/train_new.txt
+      binarize_masks: true
+  wrapper:
+    name: seqwin
+    args:
+      inp_size: 1024
+      window_size: 7
+      augment: true
+  batch_size: 2
+val_dataset:
+  dataset:
+    name: paired-sequence-folders
+    args:
+      root_path_1: /data/donghao/ir_dataset/TSIRMT/images
+      root_path_2: /data/donghao/ir_dataset/TSIRMT/masks
+      layout: split_images_masks
+      seq_list: /data/donghao/ir_dataset/TSIRMT/ImageSets/val_new.txt
+      binarize_masks: true
+  wrapper:
+    name: seqwin
+    args:
+      inp_size: 1024
+      window_size: 7
+      augment: false
+  batch_size: 1
+test_dataset:
+  dataset:
+    name: paired-sequence-folders
+    args:
+      root_path_1: /data/donghao/ir_dataset/TSIRMT/images
+      root_path_2: /data/donghao/ir_dataset/TSIRMT/masks
+      layout: split_images_masks
+      seq_list: /data/donghao/ir_dataset/TSIRMT/ImageSets/val_new.txt
+      binarize_masks: true
+  wrapper:
+    name: seqwin-test
+    args:
+      inp_size: 1024
+      window_size: 7
+      augment: false
+  batch_size: 1
+eval_type: cod
+sam_checkpoint: ./pretrained/sam_vit_b_01ec64.pth
+data_norm:
+  inp:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+  gt:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+  gt_rgb:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+model:
+  name: sam-token
+  args:
+    inp_size: 1024
+    loss: iou
+    encoder_mode:
+      name: sam
+      img_size: 1024
+      mlp_ratio: 4
+      patch_size: 16
+      qkv_bias: true
+      use_rel_pos: true
+      window_size: 14
+      out_chans: 256
+      scale_factor: 32
+      input_type: fft
+      freq_nums: 0.25
+      prompt_type: highpass
+      prompt_embed_dim: 256
+      tuning_stage: 1234
+      handcrafted_tune: true
+      embedding_tune: true
+      adaptor: adaptor
+      embed_dim: 768
+      depth: 12
+      num_heads: 12
+      global_attn_indexes:
+      - 2
+      - 5
+      - 8
+      - 11
+optimizer:
+  name: adamw
+  args:
+    lr: 0.0002
+lr_min: 1.0e-07
+epoch_max: 40
+multi_step_lr:
+  milestones:
+  - 1
+  gamma: 0.1
+epoch_val: 41
+epoch_save: 1
