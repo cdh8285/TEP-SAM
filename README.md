@@ -4,7 +4,7 @@ This repository contains a implementation of TEP-SAM for multi-frame infrared sm
 
 ## Dataset Layout
 
-NUDT-MIRSDT:
+[NUDT-MIRSDT](https://github.com/TinaLRJ/Multi-frame-infrared-small-target-detection-DTUM)
 
 ```text
 NUDT-MIRSDT/
@@ -18,7 +18,7 @@ NUDT-MIRSDT/
       masks/
 ```
 
-TSIRMT:
+[TSIRMT](https://github.com/lifier/LMAFormer)
 
 ```text
 TSIRMT/
